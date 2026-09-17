@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wii Portfolio | Video Edition</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: #000;
+      color: #333;
+      font-family: 'Nunito', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding-left: 5vw;
+    }
+
+    /* VÍDEO EM LOOP NO FUNDO */
+    #bg-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    /* Interface Wii */
+    .wii-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 48vw;
+      max-width: 620px;
+      background: linear-gradient(180deg, rgba(248, 250, 252, 0.92) 0%, rgba(226, 232, 240, 0.92) 100%);
+      border-radius: 28px;
+      box-shadow: 0 0 50px rgba(0, 162, 255, 0.3), inset 0 2px 4px #ffffff;
+      border: 4px solid #ffffff;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        justify-content: center;
+        padding-left: 0;
+      }
+      .wii-wrapper {
+        width: 90vw;
+      }
+    }
+
+    .wii-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+    }
+
+    .wii-logo {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.8rem;
+      color: #009be3;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .wii-logo span {
+      background: #009be3;
+      color: white;
+      font-size: 0.8rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .wii-clock-container {
+      text-align: right;
+      color: #64748b;
+    }
+
+    .wii-time {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.4rem;
+      color: #334155;
+    }
+
+    .wii-date {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .channels-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .channel-card {
+      position: relative;
+      background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+      border: 3px solid #cbd5e1;
+      border-radius: 20px;
+      height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .channel-card:hover {
+      transform: scale(1.05);
+      border-color: #009be3;
+      box-shadow: 0 0 20px rgba(0, 155, 227, 0.4);
+    }
+
+    .channel-icon {
+      font-size: 2.2rem;
+      margin-bottom: 4px;
+    }
+
+    .channel-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #475569;
+    }
+
+    .wii-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 2px solid #cbd5e1;
+      padding-top: 16px;
+    }
+
+    .btn-wii-round {
+      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+      border: 2px solid #94a3b8;
+      border-radius: 40px;
+      padding: 10px 22px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+    }
+
+    .btn-wii-round:hover {
+      background: #009be3;
+      color: white;
+      border-color: #0082c3;
+    }
+
+    /* Modais */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 24px;
+      padding: 28px;
+      border: 4px solid #009be3;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      transform: scale(0.8);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-align: center;
+    }
+
+    .modal-overlay.active .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.6rem;
+      color: #009be3;
+      margin-bottom: 15px;
+    }
+
+    .modal-body {
+      font-size: 1rem;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .mii-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .mii-avatar {
+      width: 110px;
+      height: 110px;
+      background: radial-gradient(circle, #e0f2fe 0%, #bae6fd 100%);
+      border-radius: 50%;
+      border: 3px solid #009be3;
+      object-fit: contain;
+      cursor: pointer;
+    }
+
+    .mii-avatar.jump {
+      animation: miiBounce 0.5s ease;
+    }
+
+    @keyframes miiBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .tech-tag {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- VÍDEO DE FUNDO (Substitua a URL pelo seu arquivo se preferir) -->
+  <video id="bg-video" autoplay loop muted playsinline>
+    <source src="Earth.mp4" type="video/mp4">
+  </video>
+
+  <!-- INTERFACE DO WII MENU -->
+  <div class="wii-wrapper">
+    <div class="wii-header">
+      <div class="wii-logo">Wii <span>Dev Edition</span></div>
+      <div class="wii-clock-container">
+        <div class="wii-time" id="clock-time">00:00</div>
+        <div class="wii-date" id="clock-date">Sex, 18 Set</div>
+      </div>
+    </div>
+
+    <div class="channels-grid">
+      <div class="channel-card" onclick="openModal('mii-modal')">
+        <div class="channel-icon">👤</div>
+        <div class="channel-title">Mii Profile</div>
+      </div>
+
+      <div class="channel-card" onclick="openModal('globe-modal')">
+        <div class="channel-icon">🌍</div>
+        <div class="channel-title">MK Globe Skills</div>
+      </div>
+
+      <div class="channel-card" onclick="openModal('disc-modal')">
+        <div class="channel-icon">💿</div>
+        <div class="channel-title">Disc Channel</div>
+      </div>
+
+      <div class="channel-card" onclick="openModal('contact-modal')">
+        <div class="channel-icon">✉️</div>
+        <div class="channel-title">Message Board</div>
+      </div>
+    </div>
+
+    <div class="wii-footer">
+      <button class="btn-wii-round" onclick="playWiiSound()">Wii Menu</button>
+      <span style="color: #64748b; font-weight: 700; font-size: 0.85rem;">Worldwide View</span>
+      <button class="btn-wii-round" onclick="downloadCV()">SD Card (CV)</button>
+    </div>
+  </div>
+
+  <!-- MODAIS -->
+  <div class="modal-overlay" id="mii-modal">
+    <div class="modal-box">
+      <div class="modal-header">👤 Mii Profile</div>
+      <div class="mii-container">
+        <img id="mii-img" class="mii-avatar" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Mii Avatar" onclick="danceMii()">
+        <span style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">Clique no Mii! 👆</span>
+      </div>
+      <div class="modal-body">
+        <p><strong>Dev Name:</strong> Programador em Formação 🚀</p>
+        <p><strong>Classe:</strong> Software Developer</p>
+        <br>
+        <p>Desenvolvedor focado em lógica, aplicações interativas e tecnologia.</p>
+      </div>
+      <button class="btn-wii-round" onclick="closeModal('mii-modal')" style="margin: 0 auto;">Voltar</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="globe-modal">
+    <div class="modal-box">
+      <div class="modal-header">🌍 Mario Kart Tech World</div>
+      <div class="modal-body">
+        <span class="tech-tag">JavaScript</span>
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">HTML5 & CSS3</span>
+        <span class="tech-tag">Git & GitHub</span>
+      </div>
+      <button class="btn-wii-round" onclick="closeModal('globe-modal')" style="margin: 0 auto;">Voltar</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="disc-modal">
+    <div class="modal-box">
+      <div class="modal-header">💿 Disc Channel (Projetos)</div>
+      <div class="modal-body" style="text-align: center;">
+        <p style="font-size: 2.5rem; margin-bottom: 8px;">🎮</p>
+        <p><strong>Insira o Disco do Projeto</strong></p>
+        <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px;">Espaço reservado para seus projetos futuros!</p>
+      </div>
+      <button class="btn-wii-round" onclick="closeModal('disc-modal')" style="margin: 0 auto;">Voltar</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="contact-modal">
+    <div class="modal-box">
+      <div class="modal-header">✉️ Message Board</div>
+      <div class="modal-body">
+        <p>🐙 <strong>GitHub:</strong> github.com/seu-usuario</p>
+        <p>💼 <strong>LinkedIn:</strong> linkedin.com/in/seu-usuario</p>
+        <p>📧 <strong>E-mail:</strong> dev@email.com</p>
+      </div>
+      <button class="btn-wii-round" onclick="closeModal('contact-modal')" style="margin: 0 auto;">Voltar</button>
+    </div>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('clock-time').textContent = `${hours}:${minutes}`;
+      const options = { weekday: 'short', day: 'numeric', month: 'short' };
+      document.getElementById('clock-date').textContent = now.toLocaleDateString('pt-BR', options);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function danceMii() {
+      const mii = document.getElementById('mii-img');
+      mii.classList.add('jump');
+      playWiiSound(880, 0.2);
+      setTimeout(() => mii.classList.remove('jump'), 500);
+    }
+
+    function downloadCV() {
+      playWiiSound(600, 0.2);
+      alert("Ação do SD Card: Aqui você poderá linkar o download do seu Currículo em PDF!");
+    }
+
+    function openModal(id) {
+      playWiiSound(523, 0.1);
+      document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+      playWiiSound(400, 0.1);
+      document.getElementById(id).classList.remove('active');
+    }
+
+    function playWiiSound(freq = 523.25, duration = 0.12) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e) {}
+    }
+  </script>
+</body>
+</html>

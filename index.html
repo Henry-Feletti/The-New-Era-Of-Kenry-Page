@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wii Portfolio | Video Edition</title>
 
-  <!-- Google Fonts -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
@@ -29,8 +29,6 @@
       align-items: center;
       padding-left: 5vw;
     }
-
-    /* VÍDEO EM LOOP NO FUNDO */
     #bg-video {
       position: absolute;
       top: 0;
@@ -41,7 +39,6 @@
       z-index: 1;
     }
 
-    /* Interface Wii */
     .wii-wrapper {
       position: relative;
       z-index: 10;
@@ -173,7 +170,7 @@
       border-color: #0082c3;
     }
 
-    /* Modais */
+    
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -267,12 +264,11 @@
 </head>
 <body>
 
-  <!-- VÍDEO DE FUNDO (Substitua a URL pelo seu arquivo se preferir) -->
   <video id="bg-video" autoplay loop muted playsinline>
     <source src="Earth.mp4" type="video/mp4">
   </video>
 
-  <!-- INTERFACE DO WII MENU -->
+  
   <div class="wii-wrapper">
     <div class="wii-header">
       <div class="wii-logo">Wii <span>Dev Edition</span></div>
@@ -311,12 +307,12 @@
     </div>
   </div>
 
-  <!-- MODAIS -->
+
   <div class="modal-overlay" id="mii-modal">
     <div class="modal-box">
       <div class="modal-header">👤 Mii Profile</div>
       <div class="mii-container">
-        <img id="mii-img" class="mii-avatar" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Mii Avatar" onclick="danceMii()">
+        <img id="mii-img" class="mii-avatar" src="pfp.jpg" alt="Mii Avatar" onclick="danceMii()">
         <span style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">Clique no Mii! 👆</span>
       </div>
       <div class="modal-body">

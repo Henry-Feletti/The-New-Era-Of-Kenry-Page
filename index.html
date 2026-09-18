@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
-    * {
+* {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -22,21 +22,56 @@
       background-color: #000;
       color: #333;
       font-family: 'Nunito', sans-serif;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      overflow-x: hidden;
       display: flex;
       justify-content: flex-start;
       align-items: center;
       padding-left: 5vw;
     }
+
+    /* CURSOR ESTILIZADO */
+    body.wii-mode-active, 
+    body.wii-mode-active * {
+      cursor: url('https://cur.cursors-4u.net/games/gam-4/gam388.cur'), auto !important;
+    }
+
+    /* MOLDURA TV RETRO */
+    .wii-tv-frame {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+      box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 162, 255, 0.3);
+      border: 12px solid #1e293b;
+      border-radius: 20px;
+      display: none;
+    }
+
+    body.wii-mode-active .wii-tv-frame {
+      display: block;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+      background-size: 100% 4px;
+    }
+
     #bg-video {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
       object-fit: cover;
       z-index: 1;
+    }
+
+    .fun-controls {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 20;
     }
 
     .wii-wrapper {
@@ -53,16 +88,6 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-    }
-
-    @media (max-width: 900px) {
-      body {
-        justify-content: center;
-        padding-left: 0;
-      }
-      .wii-wrapper {
-        width: 90vw;
-      }
     }
 
     .wii-header {
@@ -170,7 +195,6 @@
       border-color: #0082c3;
     }
 
-    
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -259,6 +283,51 @@
       font-size: 0.85rem;
       font-weight: 700;
       margin: 4px;
+    }
+
+    /* AJUSTES EXCLUSIVOS PARA SMARTPHONES E TABLETS */
+    @media (max-width: 768px) {
+      body {
+        justify-content: center;
+        padding-left: 0;
+        padding-top: 60px;
+      }
+
+      .wii-wrapper {
+        width: 92vw;
+        padding: 16px;
+        gap: 12px;
+      }
+
+      .fun-controls {
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90vw;
+        display: flex;
+        justify-content: center;
+      }
+
+      .channels-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .channel-card {
+        height: 100px;
+      }
+
+      .channel-icon {
+        font-size: 1.8rem;
+      }
+
+      .channel-title {
+        font-size: 0.8rem;
+      }
+
+      .wii-tv-frame {
+        border-width: 6px;
+      }
     }
   </style>
 </head>

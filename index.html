@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="favicon.ico/" type="image/x-icon">
 
   <style>
 * {
@@ -453,7 +453,12 @@
 
     function downloadCV() {
       playWiiSound(600, 0.2);
-      alert("Ação do SD Card: Aqui você poderá linkar o download do seu Currículo em PDF!");
+      alert("Em Breve...");
+    }
+
+    function WiiButton() {
+      playWiiSound(600, 0.2);
+      alert("Em Breve...");
     }
 
     function openModal(id) {
@@ -466,7 +471,7 @@
       document.getElementById(id).classList.remove('active');
     }
 
-    function playWiiSound(freq = 523.25, duration = 0.12) {
+    function playWiiSound(freq = 535.25, duration = 0.12) {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = audioCtx.createOscillator();
